@@ -9,19 +9,17 @@ import vgg_cifar10
 
 slim = tf.contrib.slim
 
-EXPERIMENT_NAME = 'VGG11B_pretrain'
+EXPERIMENT_NAME = 'VGG14_long_train'
 DATA_DIR = '/home/dom/cifar'
 TRAIN_DIR = '/mnt/data1/vgg_results/' + EXPERIMENT_NAME + '/train'
 BATCH_SIZE = 512
 INIT_LEARNING_RATE = 0.001
-LR_DECAY = 0.99
-NUM_EPOCHS_PER_DECAY = 2
-MAX_STEPS = 8000
+LR_DECAY = 0.5
+NUM_EPOCHS_PER_DECAY = 50
+MAX_STEPS = 20000
 NUM_CLONES = 2
-EXCLUDED_SCOPES = ('vgg_16/conv2/conv2_2',
-                   'vgg_16/conv3/conv3_3'
+EXCLUDED_SCOPES = ('vgg_16/conv3/conv3_3'
                    'vgg_16/conv4/conv4_3',
-                   'vgg_16/conv5/conv5_3',
                    'vgg_16/fc6',
                    'vgg_16/fc7',
                    'vgg_16/fc8')
@@ -142,8 +140,10 @@ def init_fn():
         if not excluded:
             variables_to_restore.append(var)
     tf.logging.info('Fine-tuning from %s' % CHECKPOINT_PATH)
-    return slim.assign_from_checkpoint_fn(CHECKPOINT_PATH,
-                                          variables_to_restore)
+    return slim.assign_from_checkpoint_fn(
+        CHECKPOINT_PATH,
+        variables_to_restore,
+        ignore_missing_vars=True)
 
 sess_config = tf.ConfigProto()
 sess_config.gpu_options.allow_growth = True

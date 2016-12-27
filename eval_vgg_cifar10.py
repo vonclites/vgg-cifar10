@@ -7,7 +7,7 @@ import vgg_cifar10
 
 slim = tf.contrib.slim
 
-EXPERIMENT_NAME = 'VGG11B_pretrain'
+EXPERIMENT_NAME = 'VGG14_long_train'
 BATCH_SIZE = 512
 CHECKPOINT_DIR = '/mnt/data1/vgg_results/' + EXPERIMENT_NAME + '/train'
 EVAL_DIR = CHECKPOINT_DIR[:-5] + 'test'
